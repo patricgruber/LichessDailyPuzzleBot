@@ -13,10 +13,12 @@ class Puzzle:
     pgn: str
     solution: List[str]
     timestamp: datetime.datetime
+    white_to_move: bool
 
     def __init__(self, id: str, pgn: str, solution: List[str], timestamp: datetime.datetime):
         self.id = id
         self.pgn = pgn
+        self.white_to_move = len(self.pgn.split(" ")) % 2 == 0
         self.solution = []
 
         board = self._get_board()
@@ -46,7 +48,8 @@ class Puzzle:
         return board
 
     def _get_board_as_svg(self):
-        return chess.svg.board(self._get_board())
+        board = self._get_board()
+        return chess.svg.board(board, flipped=not self.white_to_move, lastmove=board.peek(), colors={"square light": "#f0d9b5", "square dark": "#b58863"}, coordinates=False)
 
     def get_board_as_bytesio(self) -> BytesIO:
         with open("board.svg", "w") as f:
