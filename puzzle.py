@@ -29,18 +29,6 @@ class Puzzle:
 
         self.timestamp = timestamp
 
-    def store_to_disc(self):
-        with open("/app/data/last_puzzle.pckl", "wb") as f:
-            pickle.dump(self, f)
-
-    @staticmethod
-    def from_disc():
-        if not os.path.exists("/app/data/last_puzzle.pckl"):
-            return
-
-        with open("/app/data/last_puzzle.pckl", "rb") as f:
-            return pickle.load(f)
-
     def _get_board(self):
         board = chess.Board()
         for move in self.pgn.split(" "):

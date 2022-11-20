@@ -1,24 +1,48 @@
 #!/usr/bin/env python3
 
 import asyncio
+import datetime
+
+import dateutil.relativedelta
+
 import puzzle
 import matrix
-
-last_puzzle = None
-current_puzzle = None
+import database
 
 
 async def main():
     client = matrix.Client()
 
-    old_puzzle = puzzle.Puzzle.from_disc()
+    print("Checking if database is initialized... ", end="")
+    if not database.is_initialized():
+        print("Not initialized")
+        print("Initializing... ", end="")
+        database.initialize()
+    print("Initialized")
+
+    yesterday = datetime.date.today() - dateutil.relativedelta.relativedelta(days=1)
+    print(f"Receiving puzzle for date {yesterday} from database... ", end="")
+    old_puzzle = database.retrieve_puzzle(yesterday)
     if old_puzzle:
+        print("Found")
+        print("Sending solution for yesterday's puzzle... ", end="")
         await client.send_solution(old_puzzle)
+        print("Ok")
+    else:
+        print("Not found")
 
+    print("Fetching today's puzzle... ", end="")
     new_puzzle = puzzle.get_daily_puzzle()
-    await client.send_board(new_puzzle)
+    print("Ok")
 
-    new_puzzle.store_to_disc()
+    print("Storing today's puzzle in the database... ", end="")
+    database.store_puzzle(new_puzzle)
+    print("Ok")
+
+    print("Sending board to group... ", end="")
+    await client.send_board(new_puzzle)
+    print("Ok")
+
     await client.close()
 
 
