@@ -1,4 +1,3 @@
 requests
-matrix-nio
 chess
 python-dateutil

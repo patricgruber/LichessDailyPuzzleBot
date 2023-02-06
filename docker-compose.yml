@@ -8,7 +8,9 @@ services:
     env_file:
       - .env
     volumes:
+      - signal-data:/var/lib/signal-cli
       - data:/app/data
 
 volumes:
   data:
+  signal-data:

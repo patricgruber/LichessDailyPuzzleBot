@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 
-import asyncio
 import datetime
 
 import dateutil.relativedelta
 
 import puzzle
-import matrix
+import signal
 import database
 
 
-async def main():
-    client = matrix.Client()
+def main():
+    client = signal.Client()
 
     print("Checking if database is initialized... ", end="")
     if not database.is_initialized():
@@ -26,7 +25,7 @@ async def main():
     if old_puzzle:
         print("Found")
         print("Sending solution for yesterday's puzzle... ", end="")
-        await client.send_solution(old_puzzle)
+        client.send_solution(old_puzzle)
         print("Ok")
     else:
         print("Not found")
@@ -40,13 +39,9 @@ async def main():
     print("Ok")
 
     print("Sending board to group... ", end="")
-    await client.send_board(new_puzzle)
+    client.send_board(new_puzzle)
     print("Ok")
-
-    await client.close()
 
 
 if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    asyncio.run(main())
+    main()

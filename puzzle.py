@@ -51,8 +51,22 @@ class Puzzle:
         os.system("rm board.png board.svg")
         return png_file
 
-    def get_timestamp_str(self):
+    def get_timestamp_str(self) -> str:
         return self.timestamp.strftime("%d.%m.%Y")
+
+    def get_nice_solution_str(self) -> str:
+        moves = self.solution.copy()
+        if not self.white_to_move:
+            moves = ["..."] + moves
+
+        output = ""
+        for i in range(len(moves)):
+            if i % 2 == 0:
+                if i > 0:
+                    output += "\n"
+                output += f"{i//2+1}: "
+            output += f"{moves[i]} "
+        return output
 
 
 def get_daily_puzzle() -> Optional[Puzzle]:
