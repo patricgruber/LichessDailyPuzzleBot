@@ -1,4 +1,4 @@
-# LichessDailyPuzzleMatrixBot
+# LichessDailyPuzzleBot
 A dockerized solution to post the daily puzzle from lichess.org as an image to a Signal group via ![signal-cli](https://github.com/AsamK/signal-cli)
 
 This python script runs in a Docker container and executes every day at 8 UTC.
