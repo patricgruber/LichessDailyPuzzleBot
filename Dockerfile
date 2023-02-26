@@ -4,7 +4,7 @@ ARG VERSION=0.11.6
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /temp
-RUN apt -y update && apt -y install python3 python3-pip cron wget openjdk-17-jre imagemagick
+RUN apt -y update && apt -y install python3 python3-pip cron wget openjdk-17-jre imagemagick && rm -rf /etc/cron.*/*
 
 RUN wget https://github.com/AsamK/signal-cli/releases/download/v$VERSION/signal-cli-$VERSION-Linux.tar.gz && \
 	tar xf signal-cli-$VERSION-Linux.tar.gz -C /opt && \
@@ -20,7 +20,8 @@ RUN chmod +x bot.py
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
-RUN echo '0 8 * * * /app/bot.py' > crontab.txt && \
-    crontab crontab.txt
+RUN rm /etc/crontab && \
+    echo '0 8 * * * root /app/bot.py >/proc/1/fd/1 2>/proc/1/fd/2' > /etc/crontab && \
+    chmod 0644 /etc/crontab
 
 CMD './docker-entrypoint.sh'
