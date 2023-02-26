@@ -8,7 +8,7 @@ To start the project do the following:
 1. Copy `.env.example` to `.env`
 2. Change the env variables in `.env`
 3. Build the container with `docker-compose build`
-4. Link your Signal account with `docker-compose run bot signal-cli link`
+4. Link your Signal account with `docker-compose run bot signal-cli --config /var/lib/signal-cli link`
    1. This will show generate an URL like "sgnl://linkdevice?uuid=..."
    2. Generate a QR code out of that URL with the command `qrencode -o signal-link.png "<the URL>"`
    3. Open the generated image with an image viewer of your choice
